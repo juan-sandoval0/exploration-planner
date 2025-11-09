@@ -147,9 +147,14 @@ class MissionOptimizer:
             self.robots_df['status'] == 'Available'
         ].copy()
 
-        # Initialize robot schedules
+        # Initialize robot schedules with current positions
         robot_schedules = {
-            row['robot_id']: {'available_from': start_date, 'missions': []}
+            row['robot_id']: {
+                'available_from': start_date,
+                'missions': [],
+                'current_lat': row['current_location']['lat'],
+                'current_lon': row['current_location']['lon']
+            }
             for _, row in available_robots.iterrows()
         }
 
@@ -172,6 +177,8 @@ class MissionOptimizer:
             best_robot = None
             best_score = -1
             best_start_time = None
+            best_robot_id = None
+            best_transit_time = None
 
             for robot_id, schedule in robot_schedules.items():
                 robot = available_robots[
@@ -182,26 +189,46 @@ class MissionOptimizer:
                 if robot['max_depth_m'] * 0.9 < site['depth_m']:
                     continue
 
-                # Get compatibility score
-                comp_score = self.calculate_compatibility_score_simple(
-                    robot, site.to_dict()
-                )
-
-                if comp_score > best_score:
-                    best_score = comp_score
-                    best_robot = robot
-                    best_start_time = schedule['available_from']
-
-            # If found compatible robot, schedule mission
-            if best_robot and best_score >= 40:
-                # Calculate transit time from robot's current position
+                # Calculate transit time from robot's CURRENT position
                 transit_time = self.calculate_transit_time(
-                    best_robot['current_location']['lat'],
-                    best_robot['current_location']['lon'],
+                    schedule['current_lat'],
+                    schedule['current_lon'],
                     site['latitude'],
                     site['longitude'],
                     vessel_speed_knots
                 )
+
+                # Calculate mission duration
+                mission_duration = self.calculate_mission_duration(
+                    site.to_dict(), robot
+                )
+
+                # Calculate cost
+                mission_cost = self.calculate_mission_cost(
+                    robot, mission_duration, transit_time, vessel_day_rate
+                )
+
+                # Get compatibility score (accounting for cost-effectiveness)
+                comp_score = self.calculate_compatibility_score_simple(
+                    robot, site.to_dict()
+                )
+
+                # Adjust score based on cost (favor cheaper robots)
+                # Normalize by typical mission cost range
+                cost_factor = max(0, 100 - (mission_cost / 10000))
+                adjusted_score = comp_score * 0.7 + cost_factor * 0.3
+
+                if adjusted_score > best_score:
+                    best_score = adjusted_score
+                    best_robot = robot
+                    best_robot_id = robot_id
+                    best_start_time = schedule['available_from']
+                    best_transit_time = transit_time
+
+            # If found compatible robot, schedule mission
+            if best_robot and best_score >= 40:
+                # Use pre-calculated values
+                transit_time = best_transit_time
 
                 # Calculate mission duration
                 mission_duration = self.calculate_mission_duration(
@@ -245,9 +272,11 @@ class MissionOptimizer:
                 missions.append(mission)
                 remaining_budget -= mission_cost
 
-                # Update robot schedule
-                robot_schedules[best_robot['robot_id']]['available_from'] = mission_end
-                robot_schedules[best_robot['robot_id']]['missions'].append(mission)
+                # Update robot schedule AND position
+                robot_schedules[best_robot_id]['available_from'] = mission_end
+                robot_schedules[best_robot_id]['current_lat'] = site['latitude']
+                robot_schedules[best_robot_id]['current_lon'] = site['longitude']
+                robot_schedules[best_robot_id]['missions'].append(mission)
 
         # Calculate statistics
         total_cost = budget_usd - remaining_budget
