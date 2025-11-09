@@ -1,22 +1,22 @@
-# Deep-Sea Critical Minerals Exploration Planner
+# Exploration Planner
 
-An advanced planning and optimization tool for deep-sea mining operations that combines exploration site analysis with robotics operations planning. This application helps prioritize potential mining sites and optimize ROV/AUV deployment for exploration missions.
+I created a planning and optimization tool for deep-sea mining operations that combines exploration site analysis w/ robotics operations planning. This application helps prioritize potential mining sites and optimize ROV/AUV deployment for exploration missions.
 
 ## Overview
 
-The Deep-Sea Exploration Planner is designed for critical minerals mining companies to:
+The Deep-Sea Exploration Planner is designed to:
 
-- Evaluate and rank potential mining sites using multi-criteria analysis
-- Manage a fleet of deep-sea robots (ROVs/AUVs) with varying capabilities
+- Evaluate and rank potential mining sites w/ multi-criteria analysis
+- Manage a fleet of ROVs/AUVs with different capabilities
 - Match robot capabilities to site requirements
-- Optimize mission scheduling to maximize coverage within budget and time constraints
+- Optimize mission scheduling to maximize coverage within budget/coverage constraints
 - Track exploration coverage and identify gaps
 
 ## Features
 
 ### 1. Site Prioritization Engine
 
-- **Multi-Criteria Scoring**: Evaluates sites based on 7 weighted criteria:
+- **Multi-Criteria Scoring**: Evaluates sites based on 7 weighted criteria based on research into the industry:
   - Mineral concentration (0-100)
   - Depth accessibility
   - Distance from port
@@ -25,14 +25,14 @@ The Deep-Sea Exploration Planner is designed for critical minerals mining compan
   - Seabed terrain difficulty
   - Existing survey data quality
 
-- **Adjustable Weights**: Users can customize criterion weights via interactive sliders to align with business priorities
+- **Adjustable Weights**: Users can customize criterion weights w/ interactive sliders to align with business priorities
 
-- **Economic Viability Calculator**: Calculates NPV, ROI, and profitability metrics based on:
+- **Economic Viability Calculator**: Calculates NPV, ROI, and profitability based on:
   - Extraction, refining, and transport costs
-  - Site-specific difficulty multipliers
-  - Estimated tonnage and mineral prices
+  - Difficulty multipliers depending on the sites
+  - Estimated tonnage and mineral prices (sythetic, random in demo)
 
-- **Priority Categorization**: Sites automatically categorized as:
+- **Priority Categorization**: Sites categorized as:
   - High Priority (score ≥70, ROI >50%)
   - Medium Priority (score ≥50, ROI >25%)
   - Further Study Needed (score ≥35)
@@ -40,7 +40,7 @@ The Deep-Sea Exploration Planner is designed for critical minerals mining compan
 
 ### 2. Fleet Management Dashboard
 
-- Complete robot database with specifications:
+- Robot database with specifications:
   - Type (ROV, AUV, Hybrid)
   - Depth ratings (up to 11,000m)
   - Sensor packages
@@ -55,12 +55,12 @@ The Deep-Sea Exploration Planner is designed for critical minerals mining compan
 ### 3. Robot-Site Capability Matching
 
 - **Compatibility Analysis**:
-  - Depth rating verification with safety margins
+  - Depth rating verification w/ safety margins
   - Sensor requirement matching
   - Operational status checks
   - Compatibility scoring (0-100)
 
-- **Compatibility Matrix**: Interactive heatmap showing all robot-site pairs
+- **Compatibility Matrix**: My favorite part! Heatmap showing all robot-site pairs
 
 - **Equipment Gap Identification**:
   - Sites unreachable by current fleet
@@ -69,11 +69,13 @@ The Deep-Sea Exploration Planner is designed for critical minerals mining compan
 
 ### 4. Mission Planning Optimizer
 
-- **Greedy Scheduling Algorithm** that optimizes:
+- **Scheduling Algorithm** that optimizes:
   - Robot-to-site assignments
   - Mission sequencing
   - Transit route planning
   - Cost minimization
+
+   This is a greedy scheduling algorithm but could be upgraded in next steps.
 
 - **Constraints**:
   - Budget limits
@@ -82,22 +84,16 @@ The Deep-Sea Exploration Planner is designed for critical minerals mining compan
   - Endurance limits
   - No overlapping missions per robot
 
-- **Visualizations**:
-  - Gantt chart timeline
-  - Interactive route maps
-  - Cost breakdown by robot
-  - Coverage statistics
-
 ### 5. Coverage Analytics
 
 - Track survey quality by region
-- Identify high-value sites needing surveys
-- Coverage statistics by jurisdiction
+- Identify high-value sites that need surveys
+- Coverage statistics by site
 - Survey quality distribution analysis
 
 ## Installation
 
-### Prerequisites
+### Prereqs
 
 - Python 3.8 or higher
 - pip package manager
@@ -136,24 +132,16 @@ Start the Streamlit application:
 streamlit run app.py
 ```
 
-The application will open in your default web browser at `http://localhost:8501`.
-
 ### Navigation
 
 The application consists of five main sections accessible via the sidebar:
 
 #### 1. Site Explorer
 
-- View global map of all potential mining sites
+- View map of all potential sites
 - Adjust scoring criteria weights
 - Examine site rankings and detailed analytics
 - Perform individual site economic analysis
-
-**Usage Tips:**
-- Adjust weight sliders to match your business priorities
-- Click on map markers to see site details
-- Use the radar chart to understand score composition
-- Modify economic parameters to test different scenarios
 
 #### 2. Fleet Management
 
@@ -162,57 +150,39 @@ The application consists of five main sections accessible via the sidebar:
 - Review robot specifications and sensor capabilities
 - Track maintenance schedules
 
-**Usage Tips:**
+**You can:**
 - Filter by status to find available robots
-- Compare day rates and capabilities
+- Compare day rates & capabilities
 - Plan maintenance windows
 
 #### 3. Capability Matching
 
 - View compatibility matrix for all robot-site combinations
-- Perform detailed compatibility analysis for specific pairs
 - Identify equipment gaps in the fleet
-
-**Usage Tips:**
-- Look for green cells (high compatibility) in the matrix
-- Review detailed compatibility to understand limitations
-- Use gap analysis to inform fleet expansion decisions
 
 #### 4. Mission Planner
 
 - Configure mission parameters (budget, time window, vessel speed)
 - Generate optimized mission schedules
-- View mission timeline (Gantt chart)
 - Explore mission routes on interactive map
 - Download mission plans as JSON
 
-**Usage Tips:**
-- Start with default parameters and adjust based on results
-- Increase budget to improve coverage
-- Try different prioritization strategies (score vs. value)
-- Export mission plans for integration with other systems
-
 #### 5. Coverage Analytics
 
-- Review exploration coverage statistics
+- Look at exploration coverage statistics
 - Identify survey gaps by jurisdiction
 - Find priority targets for future surveys
 
-**Usage Tips:**
-- Focus on high-value sites with low survey quality
-- Plan surveys to balance jurisdictional coverage
-- Use analytics to justify survey investments
-
-## Technical Architecture
+## Architecture
 
 ### Project Structure
 
 ```
 exploration-planner/
-├── app.py                  # Main Streamlit application
+├── app.py                  # Streamlit application
 ├── requirements.txt        # Python dependencies
-├── README.md              # This file
-├── .gitignore             # Git ignore rules
+├── README.md              
+├── .gitignore             
 ├── data/
 │   ├── sites.json         # Sample mining site data
 │   ├── robots.json        # Robot fleet data
@@ -230,7 +200,6 @@ exploration-planner/
 
 **scoring.py**: Implements the `SitePrioritizationEngine` class
 - Multi-criteria normalization and weighted scoring
-- Economic viability calculations (NPV, ROI)
 - Priority categorization logic
 
 **matching.py**: Implements the `RobotSiteMatcher` class
@@ -243,13 +212,8 @@ exploration-planner/
 - Greedy mission scheduling algorithm
 - Transit time calculations using geodesic distance
 - Mission duration estimation
-- Cost calculations including vessel and operational costs
+- Cost calculations (includes vessel and operational costs)
 - Route sequence generation
-
-**visualization.py**: Visualization utilities
-- Interactive Folium maps with site markers
-- Plotly charts (bar, radar, heatmap, scatter, Gantt)
-- Route visualization with color-coded robot paths
 
 ### Data Model
 
@@ -296,7 +260,7 @@ exploration-planner/
 3. Calculate weighted sum: `score = Σ(normalized_i × weight_i)`
 4. Sort sites by composite score
 
-**Mission Optimization (Greedy):**
+**Mission Optimization:**
 1. Sort sites by priority (score or value)
 2. For each site in order:
    - Find best compatible available robot
@@ -308,13 +272,12 @@ exploration-planner/
 3. Return mission schedule and statistics
 
 **Distance Calculation:**
-- Uses Haversine formula via `geopy.distance.geodesic`
-- Accounts for Earth's curvature for accurate long-distance calculations
+- Uses Haversine formula w/ `geopy.distance.geodesic`
 - Converts to transit time based on vessel speed
 
 ## Sample Data
 
-The application includes 15 realistic deep-sea mining sites:
+I included 15 realistic deep-sea mining sites:
 
 - **Pacific Ocean**: Clarion-Clipperton Zone, Peru Basin, Cook Islands EEZ
 - **Atlantic Ocean**: Mid-Atlantic Ridge
@@ -327,61 +290,13 @@ And 7 robots with diverse capabilities:
 - **AUVs**: 3 autonomous survey vehicles (3,000-7,000m depth rating)
 - **Hybrid**: 1 ultra-deep hybrid ROV/AUV (11,000m depth rating)
 
-## Future Enhancements
+### Some Limitations
 
-### Planned Features
-
-1. **Advanced Optimization**
-   - Genetic algorithm for mission scheduling
-   - Multi-objective optimization (cost vs. coverage vs. time)
-   - Weather window integration
-   - Dynamic re-scheduling for mission delays
-
-2. **Risk Assessment**
-   - Environmental impact scoring
-   - Regulatory compliance tracking
-   - Technical risk evaluation
-   - Financial risk modeling
-
-3. **3D Visualization**
-   - 3D bathymetric maps
-   - Underwater terrain visualization
-   - Robot depth profiles during missions
-
-4. **Machine Learning**
-   - Mineral concentration prediction from survey data
-   - Mission duration prediction based on historical data
-   - Optimal weight recommendation for site scoring
-
-5. **Integration Capabilities**
-   - API endpoints for external systems
-   - Real-time robot telemetry integration
-   - GIS data import/export
-   - Database backend for production deployment
-
-6. **Collaborative Features**
-   - Multi-user access with role-based permissions
-   - Mission review and approval workflows
-   - Annotation and commenting on sites
-   - Shared mission plans
-
-7. **Reporting**
-   - Automated report generation (PDF/Excel)
-   - Executive dashboards
-   - ROI analysis reports
-   - Environmental compliance reports
-
-### Known Limitations
-
-- Current optimizer uses greedy algorithm (not globally optimal)
+- Optimizer uses greedy algorithm (not globally optimal)
 - No weather/seasonal constraints in scheduling
-- Simplified cost model (doesn't include mobilization, insurance, etc.)
+- Simplified cost model (doesn't include mobilization, insurance)
 - No multi-vessel support
-- Survey area assumed constant (25 km²)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
+- Survey area assumed constant at 25 km²
 
 ### Development Setup
 
@@ -393,28 +308,21 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-### Code Style
-
-- Follow PEP 8 guidelines for Python code
-- Use docstrings for all functions and classes
-- Add type hints where appropriate
-- Keep functions focused and modular
-
 ## License
 
 This project is provided as-is for demonstration purposes.
 
 ## Acknowledgments
 
-- Built with [Streamlit](https://streamlit.io/) for the web interface
+- Built w/ [Streamlit](https://streamlit.io/) for the web interface
 - Visualizations powered by [Plotly](https://plotly.com/) and [Folium](https://python-visualization.github.io/folium/)
 - Geospatial calculations using [GeoPy](https://geopy.readthedocs.io/)
 - Optimization algorithms using [SciPy](https://scipy.org/)
 
 ## Contact
 
-For questions or support, please open an issue on GitHub.
+For questions or support, contact juansd@stanford.edu
 
 ---
 
-**Note**: This is a demonstration application with synthetic data. All site locations, mineral estimates, and economic figures are illustrative and should not be used for actual mining operations.
+**Note**: This is a demonstration application with synthetic data. All site locations, mineral estimates, and economic figures are illustrative!
