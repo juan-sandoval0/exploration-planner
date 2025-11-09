@@ -348,12 +348,6 @@ def main():
             heatmap = create_compatibility_heatmap(compatibility_matrix)
             st.plotly_chart(heatmap, use_container_width=True)
 
-            st.markdown("**Legend:**")
-            st.write("- 🟢 Green (70-100): Fully compatible")
-            st.write("- 🟡 Yellow (40-70): Partially compatible")
-            st.write("- 🟠 Orange (20-40): Limited compatibility")
-            st.write("- 🔴 Red (0-20): Incompatible")
-
         with tab2:
             st.subheader("Detailed Compatibility Analysis")
 
@@ -385,16 +379,13 @@ def main():
             col1, col2, col3 = st.columns(3)
 
             with col1:
-                status_icon = "✅" if compatibility['depth_compatible'] else "❌"
-                st.write(f"{status_icon} **Depth:** {compatibility['depth_message']}")
+                st.write(f"**Depth:** {compatibility['depth_message']}")
 
             with col2:
-                status_icon = "✅" if compatibility['sensor_compatible'] else "❌"
-                st.write(f"{status_icon} **Sensors:** {compatibility['sensor_message']}")
+                st.write(f"**Sensors:** {compatibility['sensor_message']}")
 
             with col3:
-                status_icon = "✅" if compatibility['status_compatible'] else "❌"
-                st.write(f"{status_icon} **Status:** {compatibility['status_message']}")
+                st.write(f"**Status:** {compatibility['status_message']}")
 
             # Best robots for selected site
             st.markdown("### Best Robots for This Site")
