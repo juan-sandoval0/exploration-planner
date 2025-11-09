@@ -148,7 +148,7 @@ def main():
             with tab1:
                 st.subheader("Global Site Map")
                 site_map = create_site_map(scored_sites, color_by='composite_score')
-                folium_static(site_map, width=1200, height=600)
+                folium_static(site_map, width=None, height=600)
 
                 st.caption("Sites color-coded by priority: Green (High), Orange (Medium), Red (Low)")
 
@@ -510,7 +510,7 @@ def main():
                 st.subheader("Mission Routes")
                 robots_df = pd.DataFrame(robots)
                 route_map = create_mission_route_map(missions, robots_df)
-                folium_static(route_map, width=1200, height=600)
+                folium_static(route_map, width=None, height=600)
 
             with tab3:
                 st.subheader("Mission Details")
