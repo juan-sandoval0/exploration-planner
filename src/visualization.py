@@ -79,20 +79,11 @@ def create_site_map(sites_df: pd.DataFrame, color_by: str = 'composite_score') -
                 location=[site['latitude'], site['longitude']],
                 radius=8,
                 popup=folium.Popup(popup_html, max_width=300),
+                tooltip=site['site_id'],
                 color='black',
                 fillColor=color,
-                fillOpacity=0.7,
+                fillOpacity=0.8,
                 weight=2
-            ).add_to(m)
-
-            # Add site name label
-            folium.Marker(
-                location=[site['latitude'], site['longitude']],
-                icon=folium.DivIcon(html=f"""
-                    <div style="font-size: 9px; color: black; font-weight: bold;
-                         background-color: white; padding: 2px; border-radius: 3px;
-                         white-space: nowrap;">{site['site_id']}</div>
-                """)
             ).add_to(m)
 
     # Add layer control

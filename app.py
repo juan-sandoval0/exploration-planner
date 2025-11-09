@@ -76,37 +76,66 @@ def main():
 
         # Scoring weights configuration
         st.sidebar.subheader("Scoring Weights")
-        st.sidebar.caption("Adjust criteria weights (must sum to 1.0)")
 
-        weights = {
+        # Initialize session state for weights if not exists
+        if 'raw_weights' not in st.session_state:
+            st.session_state.raw_weights = {
+                'mineral_concentration': 0.20,
+                'depth': 0.15,
+                'distance_from_port': 0.10,
+                'environmental_sensitivity': 0.15,
+                'estimated_value': 0.20,
+                'terrain_difficulty': 0.10,
+                'survey_data_quality': 0.10
+            }
+
+        # Create sliders for raw weights (unnormalized)
+        raw_weights = {
             'mineral_concentration': st.sidebar.slider(
-                "Mineral Concentration", 0.0, 1.0, 0.20, 0.05
+                "Mineral Concentration", 0.0, 1.0,
+                st.session_state.raw_weights['mineral_concentration'], 0.05
             ),
             'depth': st.sidebar.slider(
-                "Depth (accessibility)", 0.0, 1.0, 0.15, 0.05
+                "Depth (accessibility)", 0.0, 1.0,
+                st.session_state.raw_weights['depth'], 0.05
             ),
             'distance_from_port': st.sidebar.slider(
-                "Distance from Port", 0.0, 1.0, 0.10, 0.05
+                "Distance from Port", 0.0, 1.0,
+                st.session_state.raw_weights['distance_from_port'], 0.05
             ),
             'environmental_sensitivity': st.sidebar.slider(
-                "Environmental Risk", 0.0, 1.0, 0.15, 0.05
+                "Environmental Risk", 0.0, 1.0,
+                st.session_state.raw_weights['environmental_sensitivity'], 0.05
             ),
             'estimated_value': st.sidebar.slider(
-                "Estimated Value", 0.0, 1.0, 0.20, 0.05
+                "Estimated Value", 0.0, 1.0,
+                st.session_state.raw_weights['estimated_value'], 0.05
             ),
             'terrain_difficulty': st.sidebar.slider(
-                "Terrain Difficulty", 0.0, 1.0, 0.10, 0.05
+                "Terrain Difficulty", 0.0, 1.0,
+                st.session_state.raw_weights['terrain_difficulty'], 0.05
             ),
             'survey_data_quality': st.sidebar.slider(
-                "Survey Data Quality", 0.0, 1.0, 0.10, 0.05
+                "Survey Data Quality", 0.0, 1.0,
+                st.session_state.raw_weights['survey_data_quality'], 0.05
             )
         }
 
-        weight_sum = sum(weights.values())
-        if abs(weight_sum - 1.0) > 0.01:
-            st.sidebar.error(f"Weights must sum to 1.0 (current: {weight_sum:.2f})")
+        # Update session state
+        st.session_state.raw_weights = raw_weights
+
+        # Normalize weights to sum to 1.0
+        weight_sum = sum(raw_weights.values())
+        if weight_sum > 0:
+            weights = {k: v / weight_sum for k, v in raw_weights.items()}
         else:
-            st.sidebar.success(f"Weights sum: {weight_sum:.2f}")
+            # If all weights are 0, use equal weights
+            weights = {k: 1/7 for k in raw_weights.keys()}
+
+        with st.sidebar.expander("View Normalized Weights"):
+            for key, value in weights.items():
+                label = key.replace('_', ' ').title()
+                st.write(f"{label}: {value:.3f}")
 
         # Initialize scoring engine
         try:
