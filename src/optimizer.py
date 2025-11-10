@@ -213,10 +213,16 @@ class MissionOptimizer:
                     robot, site.to_dict()
                 )
 
-                # Adjust score based on cost (favor cheaper robots)
-                # Normalize by typical mission cost range
-                cost_factor = max(0, 100 - (mission_cost / 10000))
-                adjusted_score = comp_score * 0.7 + cost_factor * 0.3
+                # Penalize based on mission cost (strongly favor cheaper missions)
+                # Heavily penalize expensive missions to distribute workload
+                if mission_cost > 0:
+                    # Much stronger penalty: $200k = 80pts, $500k = 50pts, $1M = 20pts, $2M+ = 0pts
+                    cost_penalty = max(0, 100 - (mission_cost / 20000))
+                else:
+                    cost_penalty = 100
+
+                # Weight: 40% compatibility, 60% cost (heavily favor cheaper missions)
+                adjusted_score = comp_score * 0.4 + cost_penalty * 0.6
 
                 if adjusted_score > best_score:
                     best_score = adjusted_score

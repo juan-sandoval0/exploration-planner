@@ -50,10 +50,6 @@ def main():
 
     # Header
     st.title("Deep-Sea Critical Minerals Exploration Planner")
-    st.markdown("""
-    Advanced planning tool for deep-sea mining operations combining site analysis,
-    robotics fleet management, and mission optimization.
-    """)
 
     # Load data
     sites, robots = load_data()
