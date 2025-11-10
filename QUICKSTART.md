@@ -1,7 +1,5 @@
 # Quick Start Guide
 
-Get up and running with the Deep-Sea Exploration Planner in 5 minutes.
-
 ## Prerequisites
 
 - Python 3.8 or higher
@@ -61,46 +59,6 @@ streamlit run app.py
 ```
 
 The application will automatically open in your default browser at `http://localhost:8501`.
-
-## First Steps
-
-### 1. Explore Sites (Site Explorer tab)
-
-- View the global map of 15 potential mining sites
-- Adjust the scoring weight sliders to change priorities
-- Click "Rankings" to see sorted sites
-- Select a specific site for detailed economic analysis
-
-### 2. View Your Fleet (Fleet Management tab)
-
-- See all 7 robots with their specifications
-- Check availability status
-- Review sensor capabilities
-
-### 3. Match Robots to Sites (Capability Matching tab)
-
-- View the compatibility heatmap
-- Find which robots can access which sites
-- Identify equipment gaps
-
-### 4. Plan Missions (Mission Planner tab)
-
-**Configure parameters:**
-- Planning Window: 180 days (default)
-- Budget: $10,000,000 (default)
-- Vessel Speed: 12 knots (default)
-
-**Generate plan:**
-1. Click "Generate Mission Plan"
-2. View the Gantt chart timeline
-3. Explore routes on the map
-4. Download the mission plan as JSON
-
-### 5. Analyze Coverage (Coverage Analytics tab)
-
-- Review survey quality statistics
-- Identify high-value sites needing surveys
-- See coverage by jurisdiction
 
 ## Example Workflows
 
